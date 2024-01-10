@@ -30,15 +30,25 @@ public:
   int x = 0;
   int y = 0;
   Color color;
-  Color lineColor = BLACK;
+  Color lineColor;
   int radius = 30;
 
   void Draw() {
     // cout << " params: " << x << ", " << y << "\n";
     DrawCircle(x, y, radius, color);
-    DrawCircleLines(x, y, 5, lineColor);
-    DrawCircleLines(x, y, 15, lineColor);
-    DrawCircleLines(x, y, 30, lineColor);
+    if (is_king) {
+      DrawCircleLines(x, y, 5, GOLD);
+      DrawCircleLines(x, y, 10, GOLD);
+      DrawCircleLines(x, y, 15, GOLD);
+      DrawCircleLines(x, y, 20, GOLD);
+      DrawCircleLines(x, y, 30, GOLD);
+
+    } else {
+
+      DrawCircleLines(x, y, 5, lineColor);
+      DrawCircleLines(x, y, 15, lineColor);
+      DrawCircleLines(x, y, 30, lineColor);
+    }
   }
 };
 
@@ -52,6 +62,7 @@ void SetupPieces(Tile tiles[], Piece player_pieces[], int num_tiles,
         player_pieces[piece_num].x = tiles[tile_num].x + 135 / 2;
         player_pieces[piece_num].y = tiles[tile_num].y + 135 / 2;
         player_pieces[piece_num].color = RED;
+        player_pieces[piece_num].lineColor = BLACK;
         piece_num++;
       }
     }
@@ -65,6 +76,7 @@ void SetupPieces(Tile tiles[], Piece player_pieces[], int num_tiles,
         player_pieces[piece_num].x = tiles[tile_num].x + 135 / 2;
         player_pieces[piece_num].y = tiles[tile_num].y + 135 / 2;
         player_pieces[piece_num].color = BLUE;
+        player_pieces[piece_num].lineColor = BLACK;
         piece_num++;
       }
     }
@@ -325,8 +337,10 @@ int main() {
             if (selectedPiece == nullptr) {
               selectedPiece = &player_1_pieces[piece_num];
               selectedPiece->color = MAROON;
+              selectedPiece->lineColor = WHITE;
             } else {
               selectedPiece->color = RED;
+              selectedPiece->lineColor = BLACK;
               selectedPiece = nullptr;
             }
           }
@@ -395,8 +409,12 @@ int main() {
                     }
                   }
                 }
+        if (selectedPiece->y == 1012) {
+          selectedPiece->is_king = true;
+        }
 
         selectedPiece->color = RED;
+        selectedPiece->lineColor = BLACK;
         selectedPiece = nullptr;
         selectedTile = nullptr;
       }
@@ -411,8 +429,10 @@ int main() {
             if (selectedPiece == nullptr) {
               selectedPiece = &player_2_pieces[piece_num];
               selectedPiece->color = DARKBLUE;
+              selectedPiece->lineColor = WHITE;
             } else {
               selectedPiece->color = BLUE;
+              selectedPiece->lineColor = BLACK;
               selectedPiece = nullptr;
             }
           }
@@ -481,11 +501,17 @@ int main() {
                     }
                   }
                 }
+        if (selectedPiece->y == 67) {
+          selectedPiece->is_king = true;
+        }
 
         selectedPiece->color = BLUE;
+        selectedPiece->lineColor = BLACK;
         selectedPiece = nullptr;
         selectedTile = nullptr;
       }
+
+      /// Check for king piece
     }
 
     // Drawing
@@ -496,6 +522,7 @@ int main() {
     for (int tile_num = 0; tile_num < num_tiles; tile_num++) {
       tiles[tile_num].Draw();
     }
+    DrawRectangleLines(0, 0, 1080, 1080, BLACK);
     // Draw Starting Player pieces
     for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
       // cout << "Piece Number " << piece_num << ": ";
