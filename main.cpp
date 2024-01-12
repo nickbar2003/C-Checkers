@@ -121,69 +121,7 @@ void SetupBoard(Tile tiles[], int num_tiles) {
   }
 }
 
-void PrintCredits() {
-  DrawText("C++ Checkers\nNicholas C. Barinaga", 1110, 1000, 20, LIGHTGRAY);
-}
-
-// void UnselectPiece(Piece pieces[], int num_pieces, bool is_player_1) {
-//   for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//     Vector2 piece_pos = {pieces[piece_num].x, pieces[piece_num].y};
-
-//     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-//       // radius of a piece is always 30
-//       if (CheckCollisionPointCircle(GetMousePosition(), piece_pos, 30)) {
-
-//         if (is_player_1) {
-
-//           pieces[piece_num].color = RED;
-//         } else {
-//           pieces[piece_num].color = BLUE;
-//         }
-//         pieces[piece_num].is_selected = false;
-//       }
-//     }
-//   }
-// }
-
-// int SelectPiece(Piece pieces[], int num_pieces, bool is_player_1) {
-//   for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//     if (pieces[piece_num].is_selected) {
-
-//       return 0;
-//     }
-//   }
-
-//   for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//     Vector2 piece_pos = {pieces[piece_num].x, pieces[piece_num].y};
-
-//     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-//       // radius of a piece is always 30
-//       if (CheckCollisionPointCircle(GetMousePosition(), piece_pos, 30)) {
-
-//         if (is_player_1) {
-
-//           pieces[piece_num].color = MAROON;
-//         } else {
-//           pieces[piece_num].color = DARKBLUE;
-//         }
-//         pieces[piece_num].is_selected = true;
-
-//         return piece_num;
-//       }
-//     }
-//   }
-//   return 0;
-// }
-
-// bool IsDiagonalMove(Tile selected_tile, Piece selected_piece) {
-
-//   if (selected_tile.x == selected_piece.x + 68 ||
-//       selected_tile.x == selected_piece.x - 202) {
-//     return true;
-//   }
-
-//   return false;
-// }
+void PrintCredits() {}
 
 bool HasNoPieceAlready(Tile selected_tile, Piece player_1_pieces[],
                        Piece player_2_pieces[], int num_pieces) {
@@ -204,96 +142,30 @@ bool HasNoPieceAlready(Tile selected_tile, Piece player_1_pieces[],
   return true;
 }
 
-// bool MovePiecePlayer1(Tile tiles[], int num_tiles, Piece pieces[],
-//                       int num_pieces, Piece otherPlayerPieces[]) {
-//   if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-//     Vector2 move_pos = GetMousePosition();
+bool CheckWin(Piece player_1_pieces[], Piece player_2_pieces[],
+              int num_pieces) {
+  bool player_1_out = true;
+  bool player_2_out = true;
+  for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+    if (!player_1_pieces[piece_num].is_removed) {
+      player_1_out = false;
+    }
+    if (!player_2_pieces[piece_num].is_removed) {
+      player_2_out = false;
+    }
+  }
+  if (!player_1_out && !player_2_out) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
-//     for (int tile_num = 0; tile_num < num_tiles; tile_num++) {
-
-//       Rectangle selected_tile = {tiles[tile_num].x, tiles[tile_num].y, 135,
-//       135
-
-//       };
-
-//       if (CheckCollisionPointRec(move_pos, selected_tile)) {
-//         // for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//         //   if (selected_tile.x == pieces[piece_num].x &&
-//         //       selected_tile.y == pieces[piece_num].y) {
-//         //     return true;
-//         //   }
-//         // }
-//         cout << "rec: " << tiles[tile_num].x << "\n";
-
-//         for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//           if (pieces[piece_num].is_selected) {
-//             if (selected_tile.y > pieces[piece_num].y &&
-//                 IsDiagonalMove(tiles[tile_num], pieces[piece_num])) {
-
-//               if (HasNoPieceAlready(tiles[tile_num], pieces,
-//               otherPlayerPieces,
-//                                     num_pieces)) {
-//                 pieces[piece_num].x = tiles[tile_num].x + 135 / 2;
-//                 pieces[piece_num].y = tiles[tile_num].y + 135 / 2;
-
-//                 pieces[piece_num].color = RED;
-//                 pieces[piece_num].is_selected = false;
-//                 return false;
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-//   // didnt move
-//   return true;
-// }
-
-// bool MovePiecePlayer2(Tile tiles[], int num_tiles, Piece pieces[],
-//                       int num_pieces, bool is_player_1,
-//                       Piece otherPlayerPieces[]) {
-//   if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-//     Vector2 move_pos = GetMousePosition();
-
-//     for (int tile_num = 0; tile_num < num_tiles; tile_num++) {
-
-//       Rectangle selected_tile = {tiles[tile_num].x, tiles[tile_num].y, 135,
-//       135
-
-//       };
-
-//       if (CheckCollisionPointRec(move_pos, selected_tile)) {
-
-//         for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
-//           if (pieces[piece_num].is_selected) {
-
-//             if (selected_tile.y < pieces[piece_num].y &&
-//                 IsDiagonalMove(tiles[tile_num], pieces[piece_num])) {
-//               if (HasNoPieceAlready(tiles[tile_num], pieces,
-//               otherPlayerPieces,
-//                                     num_pieces)) {
-//                 pieces[piece_num].x = tiles[tile_num].x + 135 / 2;
-//                 pieces[piece_num].y = tiles[tile_num].y + 135 / 2;
-
-//                 pieces[piece_num].color = BLUE;
-//                 pieces[piece_num].is_selected = false;
-//                 return false;
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-//   // didnt move
-//   return true;
-// }
-
-void RemovePiece(Piece pieces[], int piece_index_to_remove) {
-  pieces[piece_index_to_remove].x = 3000;
-  pieces[piece_index_to_remove].y = 3000;
-  pieces[piece_index_to_remove].is_removed = true;
+void RemovePiece(Piece *piece_to_remove) {
+  cout << "trying to remove!\n";
+  piece_to_remove->x = 3000;
+  piece_to_remove->y = 3000;
+  piece_to_remove->is_removed = true;
 }
 
 void UpdateMouse() {
@@ -312,9 +184,14 @@ int main() {
   const int screen_width = 1440;
   const int screen_height = 1080;
   bool is_player_1_turn = true;
-  bool is_player_2_turn = false;
+  bool player_1_won = false;
+  bool player_2_won = false;
+  bool is_draw = false;
   Piece *selectedPiece = nullptr;
   Tile *selectedTile = nullptr;
+  Piece *piece_to_remove = nullptr;
+  Rectangle draw = {1100, 300, 320, 50};
+  Rectangle cant_move = {1100, 400, 320, 50};
 
   InitWindow(screen_width, screen_height, "Checkers");
   SetTargetFPS(60);
@@ -364,7 +241,75 @@ int main() {
         }
       }
 
-      if (selectedTile && selectedPiece) {
+      if (selectedPiece && selectedPiece->is_king && selectedTile) {
+
+        if (selectedTile->playable)
+          if (selectedTile->x != selectedPiece->x - 67)
+            if (HasNoPieceAlready(*selectedTile, player_1_pieces,
+                                  player_2_pieces, num_pieces))
+              if (selectedTile->x == selectedPiece->x + 68 &&
+                      selectedTile->y == selectedPiece->y + 68 ||
+                  selectedTile->x == selectedPiece->x - 202 &&
+                      selectedTile->y == selectedPiece->y + 68 ||
+                  selectedTile->x == selectedPiece->x - 202 &&
+                      selectedTile->y == selectedPiece->y - 202 ||
+                  selectedTile->x == selectedPiece->x + 68 &&
+                      selectedTile->y == selectedPiece->y - 202) {
+
+                selectedPiece->color = RED;
+                selectedPiece->x = selectedTile->x + 67;
+                selectedPiece->y = selectedTile->y + 67;
+                is_player_1_turn = false;
+
+              }
+
+              else if (selectedTile->x == selectedPiece->x - 337 &&
+                       selectedTile->y == selectedPiece->y + 203) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_2_pieces[piece_num].x == selectedPiece->x - 135 &&
+                      player_2_pieces[piece_num].y == selectedPiece->y + 135) {
+                    piece_to_remove = &player_2_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x + 203 &&
+                         selectedTile->y == selectedPiece->y + 203) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_2_pieces[piece_num].x == selectedPiece->x + 135 &&
+                      player_2_pieces[piece_num].y == selectedPiece->y + 135) {
+                    piece_to_remove = &player_2_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x - 337 &&
+                         selectedTile->y == selectedPiece->y - 337) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_2_pieces[piece_num].x == selectedPiece->x - 135 &&
+                      player_2_pieces[piece_num].y == selectedPiece->y - 135) {
+                    piece_to_remove = &player_2_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x + 203 &&
+                         selectedTile->y == selectedPiece->y - 337) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_2_pieces[piece_num].x == selectedPiece->x + 135 &&
+                      player_2_pieces[piece_num].y == selectedPiece->y - 135) {
+                    piece_to_remove = &player_2_pieces[piece_num];
+                  }
+                }
+              }
+        if (piece_to_remove) {
+          selectedPiece->color = RED;
+          selectedPiece->x = selectedTile->x + 67;
+          selectedPiece->y = selectedTile->y + 67;
+          RemovePiece(piece_to_remove);
+          piece_to_remove = nullptr;
+          is_player_1_turn = false;
+        }
+        selectedPiece->color = RED;
+        selectedPiece->lineColor = BLACK;
+        selectedPiece = nullptr;
+        selectedTile = nullptr;
+
+      } else if (selectedTile && selectedPiece) {
 
         if (selectedTile->playable)
           if (selectedTile->y > selectedPiece->y)
@@ -387,11 +332,7 @@ int main() {
                             selectedPiece->x - 135 &&
                         player_2_pieces[piece_num].y ==
                             selectedPiece->y + 135) {
-                      selectedPiece->color = RED;
-                      selectedPiece->x = selectedTile->x + 67;
-                      selectedPiece->y = selectedTile->y + 67;
-                      RemovePiece(player_2_pieces, piece_num);
-                      is_player_1_turn = false;
+                      piece_to_remove = &player_2_pieces[piece_num];
                     }
                   }
                 } else if (selectedTile->x == selectedPiece->x + 203 &&
@@ -401,14 +342,18 @@ int main() {
                             selectedPiece->x + 135 &&
                         player_2_pieces[piece_num].y ==
                             selectedPiece->y + 135) {
-                      selectedPiece->color = RED;
-                      selectedPiece->x = selectedTile->x + 67;
-                      selectedPiece->y = selectedTile->y + 67;
-                      RemovePiece(player_2_pieces, piece_num);
-                      is_player_1_turn = false;
+                      piece_to_remove = &player_2_pieces[piece_num];
                     }
                   }
                 }
+        if (piece_to_remove) {
+          selectedPiece->color = RED;
+          selectedPiece->x = selectedTile->x + 67;
+          selectedPiece->y = selectedTile->y + 67;
+          RemovePiece(piece_to_remove);
+          piece_to_remove = nullptr;
+          is_player_1_turn = false;
+        }
         if (selectedPiece->y == 1012) {
           selectedPiece->is_king = true;
         }
@@ -456,7 +401,74 @@ int main() {
         }
       }
 
-      if (selectedTile && selectedPiece) {
+      if (selectedPiece && selectedPiece->is_king && selectedTile) {
+
+        if (selectedTile->playable)
+          if (selectedTile->x != selectedPiece->x - 67)
+            if (HasNoPieceAlready(*selectedTile, player_1_pieces,
+                                  player_2_pieces, num_pieces))
+              if (selectedTile->x == selectedPiece->x + 68 &&
+                      selectedTile->y == selectedPiece->y + 68 ||
+                  selectedTile->x == selectedPiece->x - 202 &&
+                      selectedTile->y == selectedPiece->y + 68 ||
+                  selectedTile->x == selectedPiece->x - 202 &&
+                      selectedTile->y == selectedPiece->y - 202 ||
+                  selectedTile->x == selectedPiece->x + 68 &&
+                      selectedTile->y == selectedPiece->y - 202) {
+
+                selectedPiece->color = BLUE;
+                selectedPiece->x = selectedTile->x + 67;
+                selectedPiece->y = selectedTile->y + 67;
+                is_player_1_turn = true;
+
+              }
+
+              else if (selectedTile->x == selectedPiece->x - 337 &&
+                       selectedTile->y == selectedPiece->y + 203) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_1_pieces[piece_num].x == selectedPiece->x - 135 &&
+                      player_1_pieces[piece_num].y == selectedPiece->y + 135) {
+                    piece_to_remove = &player_1_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x + 203 &&
+                         selectedTile->y == selectedPiece->y + 203) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_1_pieces[piece_num].x == selectedPiece->x + 135 &&
+                      player_1_pieces[piece_num].y == selectedPiece->y + 135) {
+                    piece_to_remove = &player_1_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x - 337 &&
+                         selectedTile->y == selectedPiece->y - 337) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_1_pieces[piece_num].x == selectedPiece->x - 135 &&
+                      player_1_pieces[piece_num].y == selectedPiece->y - 135) {
+                    piece_to_remove = &player_1_pieces[piece_num];
+                  }
+                }
+              } else if (selectedTile->x == selectedPiece->x + 203 &&
+                         selectedTile->y == selectedPiece->y - 337) {
+                for (int piece_num = 0; piece_num < num_pieces; piece_num++) {
+                  if (player_1_pieces[piece_num].x == selectedPiece->x + 135 &&
+                      player_1_pieces[piece_num].y == selectedPiece->y - 135) {
+                    piece_to_remove = &player_1_pieces[piece_num];
+                  }
+                }
+              }
+        if (piece_to_remove) {
+          selectedPiece->color = BLUE;
+          selectedPiece->x = selectedTile->x + 67;
+          selectedPiece->y = selectedTile->y + 67;
+          RemovePiece(piece_to_remove);
+          piece_to_remove = nullptr;
+          is_player_1_turn = true;
+        }
+        selectedPiece->color = BLUE;
+        selectedPiece->lineColor = BLACK;
+        selectedPiece = nullptr;
+        selectedTile = nullptr;
+      } else if (selectedTile && selectedPiece) {
 
         if (selectedTile->playable)
           if (selectedTile->y < selectedPiece->y)
@@ -479,11 +491,7 @@ int main() {
                             selectedPiece->x - 135 &&
                         player_1_pieces[piece_num].y ==
                             selectedPiece->y - 135) {
-                      selectedPiece->color = BLUE;
-                      selectedPiece->x = selectedTile->x + 67;
-                      selectedPiece->y = selectedTile->y + 67;
-                      RemovePiece(player_1_pieces, piece_num);
-                      is_player_1_turn = true;
+                      piece_to_remove = &player_1_pieces[piece_num];
                     }
                   }
                 } else if (selectedTile->x == selectedPiece->x + 203 &&
@@ -493,14 +501,19 @@ int main() {
                             selectedPiece->x + 135 &&
                         player_1_pieces[piece_num].y ==
                             selectedPiece->y - 135) {
-                      selectedPiece->color = BLUE;
-                      selectedPiece->x = selectedTile->x + 67;
-                      selectedPiece->y = selectedTile->y + 67;
-                      RemovePiece(player_1_pieces, piece_num);
-                      is_player_1_turn = true;
+                      piece_to_remove = &player_1_pieces[piece_num];
                     }
                   }
                 }
+        if (piece_to_remove) {
+          selectedPiece->color = BLUE;
+          selectedPiece->x = selectedTile->x + 67;
+          selectedPiece->y = selectedTile->y + 67;
+          RemovePiece(piece_to_remove);
+          piece_to_remove = nullptr;
+          is_player_1_turn = true;
+        }
+
         if (selectedPiece->y == 67) {
           selectedPiece->is_king = true;
         }
@@ -516,7 +529,7 @@ int main() {
 
     // Drawing
     BeginDrawing();
-    ClearBackground(WHITE);
+    ClearBackground(DARKGRAY);
 
     // Draw Board
     for (int tile_num = 0; tile_num < num_tiles; tile_num++) {
@@ -529,7 +542,52 @@ int main() {
       player_1_pieces[piece_num].Draw();
       player_2_pieces[piece_num].Draw();
     }
-    PrintCredits();
+
+    if (CheckWin(player_1_pieces, player_2_pieces, num_pieces)) {
+      if (is_player_1_turn) {
+        bool player_2_won = true;
+      } else {
+        bool player_1_won = true;
+      }
+    } else {
+
+      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        Vector2 mouse_pos = GetMousePosition();
+
+        if (CheckCollisionPointRec(mouse_pos, cant_move)) {
+          if (is_player_1_turn) {
+            player_2_won = true;
+          } else {
+            player_1_won = true;
+          }
+
+        } else if (CheckCollisionPointRec(mouse_pos, draw)) {
+          is_draw = true;
+        }
+      }
+    }
+
+    if (is_draw && !player_1_won && !player_2_won) {
+      DrawText("DRAW!", 1100, 500, 40, ORANGE);
+    }
+
+    if (player_1_won && !is_draw && !player_2_won) {
+
+      DrawText("Player 1 Won!", 1100, 500, 40, ORANGE);
+    }
+
+    if (player_2_won && !is_draw && !player_1_won) {
+
+      DrawText("Player 2 Won!", 1100, 500, 40, ORANGE);
+    }
+
+    DrawRectangleRec(cant_move, LIGHTGRAY);
+    DrawText("GIVE UP", 1180, 405, 40, WHITE);
+
+    DrawRectangleRec(draw, LIGHTGRAY);
+    DrawText("DRAW", 1200, 305, 40, WHITE);
+
+    DrawText("C++ Checkers\nNicholas C. Barinaga", 1110, 1000, 20, LIGHTGRAY);
 
     EndDrawing();
   }
