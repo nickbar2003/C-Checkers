@@ -1,3 +1,8 @@
+# Note From Nicholas
+
+I used a raylib starter template setup to use vscode on windows with raylib, I borrowed it from Programming with Nick, his information is below
+
+
 # Raylib C++ Starter Template
 
 Raylib C++ Starter Template for Visual Studio Code on Windows.
